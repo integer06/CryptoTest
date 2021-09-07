@@ -1,8 +1,9 @@
-main.c:153:5:main	40	static
-main.c:266:6:SystemClock_Config	72	static
-main.c:302:13:MX_CRC_Init	8	static
-main.c:328:13:MX_GPIO_Init	32	static
-main.c:365:9:STM32_AES_CCM_Encrypt	376	static
-main.c:446:9:STM32_AES_CCM_Decrypt	376	static
-main.c:525:12:Buffercmp	24	static
-main.c:546:6:Error_Handler	4	static,ignoring_inline_asm
+main.c:157:5:main	40	static
+main.c:289:6:SystemClock_Config	72	static
+main.c:328:13:MX_CRC_Init	8	static
+main.c:354:13:MX_TIM1_Init	32	static
+main.c:400:13:MX_GPIO_Init	40	static
+main.c:438:9:STM32_AES_CCM_Encrypt	376	static
+main.c:519:9:STM32_AES_CCM_Decrypt	376	static
+main.c:598:12:Buffercmp	24	static
+main.c:619:6:Error_Handler	4	static,ignoring_inline_asm

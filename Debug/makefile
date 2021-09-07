@@ -61,8 +61,8 @@ all: main-build
 main-build: CryptoTest.elf secondary-outputs
 
 # Tool invocations
-CryptoTest.elf: $(OBJS) $(USER_OBJS) C:\STM\CubeIDE\CryptoTest\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "CryptoTest.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\STM\CubeIDE\CryptoTest\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="CryptoTest.map" -Wl,--gc-sections -static -L"C:\STM\x-cube-cryptolib-master\Fw_Crypto\STM32F1\Middlewares\ST\STM32_Cryptographic\Lib" --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+CryptoTest.elf: $(OBJS) $(USER_OBJS) C:\STM32\Cube\CryptoTest\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "CryptoTest.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\STM32\Cube\CryptoTest\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="CryptoTest.map" -Wl,--gc-sections -static -L"C:\STM32\Cube\CryptoTest\Lib\STM32F1\Middlewares\ST\STM32_Cryptographic\Lib" --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
