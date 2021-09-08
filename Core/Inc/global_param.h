@@ -1,7 +1,9 @@
 #ifndef GLOBAL_PARAM_H
 #define GLOBAL_PARAM_H
 
-unsigned int timeDeCrypt = 0;
+#include <stdint.h>
+
+extern uint32_t time_Decrypt;
 
 #endif // GLOBAL_PARAM_H
 

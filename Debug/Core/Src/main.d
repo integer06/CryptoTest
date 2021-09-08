@@ -100,7 +100,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  C:/STM32/Cube/CryptoTest/Lib/STM32F1/Middlewares/ST/STM32_Cryptographic/Inc/C25519/c25519.h \
  C:/STM32/Cube/CryptoTest/Lib/STM32F1/Middlewares/ST/STM32_Cryptographic/Inc/CHACHA/chacha.h \
  C:/STM32/Cube/CryptoTest/Lib/STM32F1/Middlewares/ST/STM32_Cryptographic/Inc/CHACHA20-POLY1305/chacha20-poly1305.h \
- ../Core/Src/globalParam.h
+ ../Core/Inc/global_param.h
 
 ../Core/Inc/main.h:
 
@@ -306,4 +306,4 @@ C:/STM32/Cube/CryptoTest/Lib/STM32F1/Middlewares/ST/STM32_Cryptographic/Inc/CHAC
 
 C:/STM32/Cube/CryptoTest/Lib/STM32F1/Middlewares/ST/STM32_Cryptographic/Inc/CHACHA20-POLY1305/chacha20-poly1305.h:
 
-../Core/Src/globalParam.h:
+../Core/Inc/global_param.h:

@@ -19,8 +19,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "crypto.h"
-#include "globalParam.h"
+
+
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -223,7 +223,7 @@ int main(void)
 
 
   /* Запускаем отсчте таймера */
-
+  time_Decrypt = 0; // переменная для хранения времени декодирования
 
   /* Расшифровываем блок */
   /* Decrypt DATA with AES in CCM mode and check the authentication TAG */
