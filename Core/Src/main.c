@@ -44,6 +44,8 @@ CRC_HandleTypeDef hcrc;
 
 TIM_HandleTypeDef htim1;
 
+UART_HandleTypeDef huart1;
+
 /* USER CODE BEGIN PV */
 /* Private typedef -----------------------------------------------------------*/
 typedef enum {FAILED = 0, PASSED = !FAILED} TestStatus;
@@ -101,6 +103,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_CRC_Init(void);
 static void MX_TIM1_Init(void);
+static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN PFP */
 /* Buffer to store the output data and the authentication TAG */
 uint8_t encrypt_OutputMessage[64];
@@ -141,6 +144,9 @@ int32_t STM32_AES_CCM_Decrypt(uint8_t*  HeaderMessage,
 TestStatus Buffercmp(const uint8_t* pBuffer,
                      uint8_t* pBuffer1,
                      uint16_t BufferLength);
+
+int32_t status = AES_SUCCESS;
+uint32_t Decrypting_Time = 0;
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -155,7 +161,7 @@ TestStatus Buffercmp(const uint8_t* pBuffer,
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	int32_t status = AES_SUCCESS;
+
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -178,6 +184,7 @@ int main(void)
   MX_GPIO_Init();
   MX_CRC_Init();
   MX_TIM1_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   /* Encrypt DATA with AES in CCM mode and generate authentication TAG */
   /* Шифруем блок */
@@ -218,59 +225,9 @@ int main(void)
   // входим в сяпящий режим
   HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
 
-  /* Контролируем кнопку */
-
-
-  /* Будим ядро */
-  HAL_ResumeTick();
-
-  /* Запускаем отсчте таймера */
-  time_Decrypt = 0; // переменная для хранения времени декодирования
-
-  /* Расшифровываем блок */
-  /* Decrypt DATA with AES in CCM mode and check the authentication TAG */
-  status = STM32_AES_CCM_Decrypt( (uint8_t *) HeaderMessage, sizeof(HeaderMessage), (uint8_t *) encrypt_OutputMessage,
-                                  encrypt_OutputMessageLength, Key, IV, sizeof(IV), decrypt_OutputMessage,
-                                  &decrypt_OutputMessageLength, AuthenticationTAGLength);
-  if (status == AUTHENTICATION_SUCCESSFUL)
-  {
-
-    if (Buffercmp(Plaintext, decrypt_OutputMessage, PLAINTEXT_LENGTH) == PASSED)
-    {
-      /* add application traitment in case of AES CCM encryption is passed */
-
-    }
-    else
-    {
-
-      Error_Handler();
-
-
-    }
-    /* Add application traitment in case of AES CCM authentication is successful */
-  }
-  else
-  {
-    /*  In case of AES CCM authentication is failed possible values
-      *  of status:
-      * AES_ERR_BAD_OPERATION, AES_ERR_BAD_CONTEXT, AES_ERR_BAD_PARAMETER,
-      * AUTHENTICATION_FAILED
-      */
-
-    Error_Handler();
-
-
-  }
-
-  /* Останавливаем таймер и фиксируем время */
 
 
 
-  /* Отправляем расшифрованный блок и потраченное на расшифровку время */
-
-
-  /* Turn on the green led in an infinite loop in case of AES CCM operations are succssfuls*/
-  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -395,6 +352,39 @@ static void MX_TIM1_Init(void)
 }
 
 /**
+  * @brief USART1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART1_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART1_Init 0 */
+
+  /* USER CODE END USART1_Init 0 */
+
+  /* USER CODE BEGIN USART1_Init 1 */
+
+  /* USER CODE END USART1_Init 1 */
+  huart1.Instance = USART1;
+  huart1.Init.BaudRate = 9600;
+  huart1.Init.WordLength = UART_WORDLENGTH_8B;
+  huart1.Init.StopBits = UART_STOPBITS_1;
+  huart1.Init.Parity = UART_PARITY_NONE;
+  huart1.Init.Mode = UART_MODE_TX_RX;
+  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART1_Init 2 */
+
+  /* USER CODE END USART1_Init 2 */
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -409,7 +399,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_RESET);
@@ -433,6 +423,18 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(BUTTON_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PA2 */
+  GPIO_InitStruct.Pin = GPIO_PIN_2;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PA3 */
+  GPIO_InitStruct.Pin = GPIO_PIN_3;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI1_IRQn, 0, 0);
@@ -639,7 +641,60 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	// Была нажата кнопка, поэтому запускаем обработчик прерываний
 
+	// �?ндицируем работу по прерыванию
 	HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_SET);
+	  /* Будим ядро */
+	  HAL_ResumeTick();
+
+	  /* Запускаем отсчте таймера */
+	  time_Decrypt = 0; // обнуляем переменную счетчика
+
+	  /* Расшифровываем блок */
+	  /* Decrypt DATA with AES in CCM mode and check the authentication TAG */
+	  status = STM32_AES_CCM_Decrypt( (uint8_t *) HeaderMessage, sizeof(HeaderMessage), (uint8_t *) encrypt_OutputMessage,
+	                                  encrypt_OutputMessageLength, Key, IV, sizeof(IV), decrypt_OutputMessage,
+	                                  &decrypt_OutputMessageLength, AuthenticationTAGLength);
+	  if (status == AUTHENTICATION_SUCCESSFUL)
+	  {
+
+	    if (Buffercmp(Plaintext, decrypt_OutputMessage, PLAINTEXT_LENGTH) == PASSED)
+	    {
+	      /* add application traitment in case of AES CCM encryption is passed */
+
+	    }
+	    else
+	    {
+
+	      Error_Handler();
+
+
+	    }
+	    /* Add application traitment in case of AES CCM authentication is successful */
+	  }
+	  else
+	  {
+	    /*  In case of AES CCM authentication is failed possible values
+	      *  of status:
+	      * AES_ERR_BAD_OPERATION, AES_ERR_BAD_CONTEXT, AES_ERR_BAD_PARAMETER,
+	      * AUTHENTICATION_FAILED
+	      */
+
+	    Error_Handler();
+
+
+	  }
+
+	  /* Фиксируем время */
+      Decrypting_Time = time_Decrypt;
+
+
+	  /* Отправляем расшифрованный блок и потраченное на расшифровку время */
+      HAL_UART_Transmit(&huart1, decrypt_OutputMessage, 64, 1000);
+      HAL_UART_Transmit(&huart1, (char)Decrypting_Time, 32, 1000);
+
+
+	  /* Turn on the green led in an infinite loop in case of AES CCM operations are succssfuls*/
+	  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET);
 }
 
 /* USER CODE END 4 */

@@ -17,9 +17,10 @@
   *
   ******************************************************************************
   */
+//#include "crypto.h"
+//#include "global_param.h"
 /* USER CODE END Header */
-#include "crypto.h"
-#include "global_param.h"
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MAIN_H
 #define __MAIN_H
@@ -33,7 +34,9 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "crypto.h"
+#include "global_param.h"
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
