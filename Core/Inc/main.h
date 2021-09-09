@@ -18,7 +18,8 @@
   ******************************************************************************
   */
 /* USER CODE END Header */
-
+#include "crypto.h"
+#include "global_param.h"
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MAIN_H
 #define __MAIN_H
@@ -29,9 +30,6 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f1xx_hal.h"
-#include "crypto.h"
-#include "global_param.h"
-//#include "global_param.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -63,6 +61,11 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define LED2_Pin GPIO_PIN_13
 #define LED2_GPIO_Port GPIOC
+#define LED3_Pin GPIO_PIN_0
+#define LED3_GPIO_Port GPIOA
+#define BUTTON_Pin GPIO_PIN_1
+#define BUTTON_GPIO_Port GPIOA
+#define BUTTON_EXTI_IRQn EXTI1_IRQn
 #define TIMER1_Pin GPIO_PIN_7
 #define TIMER1_GPIO_Port GPIOA
 /* USER CODE BEGIN Private defines */
