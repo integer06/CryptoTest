@@ -690,7 +690,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 	  /* Отправляем расшифрованный блок и потраченное на расшифровку время */
       HAL_UART_Transmit(&huart1, decrypt_OutputMessage, 64, 1000);
-      HAL_UART_Transmit(&huart1, (char)Decrypting_Time, 32, 1000);
+      HAL_UART_Transmit(&huart1, (uint8_t*)Decrypting_Time, 32, 1000);
 
 
 	  /* Turn on the green led in an infinite loop in case of AES CCM operations are succssfuls*/
